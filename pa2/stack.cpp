@@ -61,7 +61,7 @@ T Stack<T>::remove()
 template <class T>
 T Stack<T>::peek()
 {
-    return myStack.popR();
+    return myStack.peekR();
 }
 
 /**

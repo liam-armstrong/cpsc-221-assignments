@@ -51,15 +51,51 @@ T Deque<T>::popL()
         k2 = -1;
         return ret;
     }
-    
-    if((k1 - 1) > (k2 - k1)){
-        //Vector too big 
-        //Resize operation
+
+    T ret = data[k1];
+    k1++;
+
+    if(k1 >= (k2 - k1) + 1){
+        vector<T> sub;
+        for(int i = 0; i <= (k2 - k1); i++){
+            sub.push_back(data[k1 + i]);
+        }
+        data = sub;
+        k1 = 0;
+        k2 = (int)sub.size() - 1;
     }
 
-    k1++;
-    return data[k1 - 1];
+    return ret;
 }
+
+// template <class T>
+// void Deque<T>::resize(){
+//     vector<T> sub;
+//     for(int i = 0; i <= (k2 - k1); i++){
+//         sub.push_back(data[k1 + i]);
+//     }
+//     print();
+//     data = sub;
+//     k1 = 0;
+//     k2 = (int)sub.size() - 1;
+//     print();
+//     cout<<"\n";
+// }
+
+// template <class T>
+// void Deque<T>::print(){
+//     cout<<"Data: { ";
+//     for(int i = 0; i < (int)data.size(); i++){
+//         if(i == k1 || i == k2){
+//             cout<<"*"<<data[i]<<"*"<<' ';
+//         } else {
+//             cout<<data[i]<<' ';
+//         }
+//     }
+//     cout<<"}"<<endl;
+//     cout<<"Size: "<< data.size()<<"\nk1: "<<k1<<"\nk2: "<<k2<<endl;
+//     cout<<"Should Resize: "<< (k1 > (k2 - k1) + 1)<<endl;
+// }
 /**
  * Removes the object at the right of the Deque, and returns it to the
  * caller.
@@ -81,15 +117,21 @@ T Deque<T>::popR()
         k2 = -1;
         return ret;
     }
-    
-    if((k1 - 1) > (k2 - k1)){
-        //Vector too big 
-        //Resize operation
-    }
-
     T ret = data[k2];
     k2--;
     data.pop_back();
+
+    
+    if(k1 >= (k2 - k1) + 1){
+        vector<T> sub;
+        for(int i = 0; i <= (k2 - k1); i++){
+            sub.push_back(data[k1 + i]);
+        }
+        data = sub;
+        k1 = 0;
+        k2 = (int)sub.size() - 1;
+    }
+
     return ret;
 }
 
