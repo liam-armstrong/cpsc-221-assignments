@@ -18,9 +18,9 @@ HSLAPixel borderColorPicker::operator()(int x, int y)
             if((x + a) >= (int)im.width() || (x + a) < 0 || (y + b) >= (int)im.height() || (y + b) < 0){
                 return color;
             } else {
-                HSLAPixel * p = im.getPixel((x + a),(y + b));
-                if(p->h == color.h && p->l == color.l && p->s == color.s){
-                    return color;
+                HSLAPixel p = *im.getPixel((x + a),(y + b));
+                if(ctr.dist(p) >= tol){
+                    return color; 
                 }
             }
         }

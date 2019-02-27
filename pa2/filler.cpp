@@ -8,17 +8,15 @@
 animation filler::fillStripeDFS(PNG& img, int x, int y, HSLAPixel fillColor,
                                 int stripeSpacing, double tolerance, int frameFreq)
 {
-    /**
-     * @todo Your code here! 
-     */
+    stripeColorPicker a(fillColor, stripeSpacing);
+    return fill<Stack>(img, x, y, a, tolerance, frameFreq);
 }
 
 animation filler::fillBorderDFS(PNG& img, int x, int y,
                                     HSLAPixel borderColor, double tolerance, int frameFreq)
 {
-    /**
-     * @todo Your code here! 
-     */
+    borderColorPicker a(borderColor, img, tolerance, *img.getPixel(x,y));
+    return fill<Stack>(img, x, y, a, tolerance, frameFreq);
 }
 
 /* Given implementation of a DFS rainbow fill. */
@@ -32,17 +30,15 @@ animation filler::fillRainDFS(PNG& img, int x, int y,
 animation filler::fillStripeBFS(PNG& img, int x, int y, HSLAPixel fillColor,
                                 int stripeSpacing, double tolerance, int frameFreq)
 {
-    /**
-     * @todo Your code here! 
-     */
+    stripeColorPicker a(fillColor, stripeSpacing);
+    return fill<Queue>(img, x, y, a, tolerance, frameFreq);
 }
 
 animation filler::fillBorderBFS(PNG& img, int x, int y,
                                     HSLAPixel borderColor, double tolerance, int frameFreq)
 {
-    /**
-     * @todo Your code here! You should replace the following line with a
-     */
+    borderColorPicker a(borderColor, img, tolerance, *img.getPixel(x,y));
+    return fill<Queue>(img, x, y, a, tolerance, frameFreq);
 }
 
 /* Given implementation of a BFS rainbow fill. */
@@ -57,6 +53,54 @@ template <template <class T> class OrderingStructure>
 animation filler::fill(PNG& img, int x, int y, colorPicker& fillColor,
                        double tolerance, int frameFreq)
 {
+    animation ani;
+    OrderingStructure<pair<int, int>> ord;
+    vector<vector<unsigned char>> visited;
+    vector<pair<int,int>> pixelOrder = {
+        make_pair(1, -1), make_pair(0, -1), make_pair(-1, -1), 
+        make_pair(-1, 0), make_pair(-1, 1), make_pair(0, 1), 
+        make_pair(1, 1), make_pair(1, 0)};
+    int k = 0;
+
+    for(int i = 0; i <= (int)img.width(); i++){
+        vector<unsigned char> visitedCol; 
+        for(int j = 0; j <= (int)img.height(); j++){
+            visitedCol.push_back('f');
+        }
+        visited.push_back(visitedCol);
+    }
+
+    HSLAPixel centerPixel = *img.getPixel(x,y);
+    *img.getPixel(x,y) = fillColor(x,y);
+    visited[x][y] = 't';
+    ord.add(make_pair(x,y));
+    k++;
+
+    while(!ord.isEmpty()){
+        pair<int, int> p = ord.remove();
+        for(int i = 0; i <= 7; i++){
+            pair<int, int> np = pixelOrder[i];
+            int nx = p.first + np.first;
+            int ny = p.second + np.second;
+            if(nx >= (int)img.width() || nx < 0 || ny >= (int)img.height() || ny < 0){
+                continue;
+            }
+            
+            HSLAPixel nPixel = *img.getPixel(nx,ny);
+
+            if(visited[nx][ny] == 'f'){
+                if(centerPixel.dist(nPixel) <= tolerance){
+                    k++;
+                    *img.getPixel(nx,ny) = fillColor(nx,ny);
+                    ord.add(make_pair(nx,ny));
+                    if((k % frameFreq) == 0) ani.addFrame(img);
+                }
+                visited[nx][ny] = 't';    
+            } 
+        }
+    }
+    ani.addFrame(img);
+    return ani;
     /**
      * @todo You need to implement this function!
      *
