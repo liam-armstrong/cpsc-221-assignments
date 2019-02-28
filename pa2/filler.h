@@ -15,6 +15,7 @@
 #include "rainbowColorPicker.h" // given as an example
 #include "borderColorPicker.h"
 #include "stripeColorPicker.h"
+#include "customColorPicker.h"
 using namespace cs221util;
 
 /**
@@ -111,7 +112,6 @@ namespace filler
                 long double freq, double tolerance, int frameFreq);
         animation fillRainBFS(PNG& img, int x, int y, 
                 long double freq, double tolerance, int frameFreq);
-
 
     /**
      * Filling function: a general helper that should be invoked by

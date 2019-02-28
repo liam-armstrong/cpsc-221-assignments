@@ -3,7 +3,7 @@
  * Implementation of functions in the filler namespace. 
  *
  */
-//#include "filler.h"
+#include "filler.h"
 
 animation filler::fillStripeDFS(PNG& img, int x, int y, HSLAPixel fillColor,
                                 int stripeSpacing, double tolerance, int frameFreq)
@@ -23,8 +23,12 @@ animation filler::fillBorderDFS(PNG& img, int x, int y,
 animation filler::fillRainDFS(PNG& img, int x, int y,
                                     long double freq, double tolerance, int frameFreq)
 {
-    rainbowColorPicker a(freq);
-    return fill<Stack>(img, x, y, a, tolerance, frameFreq);
+
+    customColorPicker ccp;
+    return filler::fill<Stack>(img, x, y, ccp, tolerance, frameFreq);
+
+    // rainbowColorPicker a(freq);
+    // return fill<Stack>(img, x, y, a, tolerance, frameFreq);
 }
 
 animation filler::fillStripeBFS(PNG& img, int x, int y, HSLAPixel fillColor,
@@ -45,8 +49,12 @@ animation filler::fillBorderBFS(PNG& img, int x, int y,
 animation filler::fillRainBFS(PNG& img, int x, int y,
                                     long double freq, double tolerance, int frameFreq)
 {
-    rainbowColorPicker a(freq);
-    return fill<Queue>(img, x, y, a, tolerance, frameFreq);
+
+    customColorPicker ccp;
+    return filler::fill<Queue>(img, x, y, ccp, tolerance, frameFreq);
+
+    // rainbowColorPicker a(freq);
+    // return fill<Queue>(img, x, y, a, tolerance, frameFreq);
 }
 
 template <template <class T> class OrderingStructure>
@@ -100,6 +108,7 @@ animation filler::fill(PNG& img, int x, int y, colorPicker& fillColor,
         }
     }
     ani.addFrame(img);
+    cout<<k<<endl;
     return ani;
     /**
      * @todo You need to implement this function!

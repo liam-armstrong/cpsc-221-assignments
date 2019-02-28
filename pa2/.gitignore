@@ -190,6 +190,7 @@ Temporary Items
 .apdisk
 
 # Image outputs
+!**/*.gif
 pa2/frames
 pa2/images
 pa2/originals
