@@ -188,3 +188,10 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Image outputs
+pa2/frames
+pa2/images
+pa2/originals
+pa2/soln_images
+pa2/soln_frames
